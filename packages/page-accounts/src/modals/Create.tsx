@@ -124,6 +124,7 @@ function generateSeed (_seed: string | undefined | null, derivePath: string, see
 }
 
 function updateAddress (seed: string, derivePath: string, seedType: SeedType, pairType: KeypairType): AddressState {
+  console.log("seed",seed,"derivePath",derivePath,"seedType",seedType,"pairType",pairType)
   const deriveValidation = deriveValidate(seed, seedType, derivePath, pairType);
   let isSeedValid = seedType === 'raw'
     ? rawValidate(seed)
@@ -137,7 +138,15 @@ function updateAddress (seed: string, derivePath: string, seedType: SeedType, pa
       isSeedValid = false;
     }
   }
-
+console.log({
+  address,
+  derivePath,
+  deriveValidation,
+  isSeedValid,
+  pairType,
+  seed,
+  seedType
+})
   return {
     address,
     derivePath,
@@ -296,7 +305,7 @@ function Create ({ className = '', onClose, onStatusChange, seed: propsSeed, typ
             <Modal.Column>
               <TextArea
                 help={isEthereum
-                  ? t<string>("Your ethereum key pair is derived from your private key. Don't divulge this key.")
+                  ? t<string>("Your ethereum key pair is derived from your private key or mnemonic. Don't divulge this information.")
                   : t<string>('The private key for your account is derived from this seed. This seed must be kept secret as anyone in its possession has access to the funds of this account. If you validate, use the seed of the session account as the "--key" parameter of your node.')}
                 isAction
                 isError={!isSeedValid}
