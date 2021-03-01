@@ -109,10 +109,15 @@ function rawValidate (seed: string): boolean {
   return ((seed.length > 0) && (seed.length <= 32)) || isHexSeed(seed);
 }
 
-function addressFromSeed (seed: string, derivePath: string, pairType: PairType): string {
-  return keyring
-    .createFromUri(getSuri(seed, derivePath, pairType), {}, pairType === 'ed25519-ledger' ? 'ed25519' : pairType)
-    .address;
+// Derives address from Seed. IN the case of private key for ethereum, the address needs to be derived only once without derivation path
+function addressFromSeed (seed: string, derivePath: string, pairType: PairType,seedType:SeedType): string {
+  if (seedType === 'raw' && pairType==='ethereum'){
+    return keyring.addFromSeed
+  } else {
+    return keyring
+      .createFromUri(getSuri(seed, derivePath, pairType), {}, pairType === 'ed25519-ledger' ? 'ed25519' : pairType)
+      .address;
+  }
 }
 
 function newSeed (seed: string | undefined | null, seedType: SeedType): string {
